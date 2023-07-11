@@ -25,6 +25,16 @@
                         </div>
 
                         <div class="mt-4">
+                            <x-label for="branch_id" value="{{ __('Branch') }}" />
+                            <select name="branch_id" id="branch_id"  class="block mt-1 w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm" >
+                                <option value="">Select a branch</option>
+                                @foreach (\App\Models\Branch::all() as $branch)
+                                    <option value="{{ $branch->id }}" {{ old('branch_id') == $branch->id ? 'selected' : '' }}>{{ $branch->bank_name }} - {{ $branch->bank_div_name }} - {{ $branch->bank_sdiv_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="mt-4">
                             <x-label for="role" value="{{ __('Role') }}" />
                             <select name="role" id="role"  class="block mt-1 w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm" >
                                 <option value="">Select a role</option>

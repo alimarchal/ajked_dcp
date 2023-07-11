@@ -22,7 +22,6 @@ class StoreVoucherRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'date' => 'required|date',
             'total_vouchers' => 'nullable|numeric',
             'amount' => 'nullable|numeric',
         ];

@@ -14,10 +14,12 @@
                     <form method="POST" action="{{ route('voucher.store') }}">
                         @csrf
 
+                        @role('Super-Admin|Admin')
                         <div>
                             <x-label for="date" value="{{ __('Date') }}" />
                             <x-input id="date" class="block mt-1 w-full" type="date" name="date" :value="old('date')" required value="{{ date('Y-m-d') }}" max="{{date('Y-m-d')}}" />
                         </div>
+                        @endrole
 
                         <div class="mt-4">
                             <x-label for="total_vouchers" value="{{ __('Total Vouchers') }}" />

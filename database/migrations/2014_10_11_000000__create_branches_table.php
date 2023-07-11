@@ -13,11 +13,13 @@ return new class extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('bank_code')->nullable();
-            $table->string('bank_name')->nullable();
-            $table->unsignedBigInteger('bank_sdiv')->nullable();
+            $table->string('bank_code')->nullable();
             $table->unsignedBigInteger('bank_code_branch')->nullable();
-            $table->unsignedBigInteger('cc_code')->nullable();
+            $table->string('bank_name')->nullable();
+            $table->unsignedBigInteger('bank_sdiv_code')->nullable();
+            $table->string('bank_sdiv_name')->nullable();
+            $table->unsignedBigInteger('bank_div_code')->nullable();
+            $table->string('bank_div_name')->nullable();
             $table->timestamps();
         });
     }

@@ -18,7 +18,7 @@ class UserController extends Controller
 
     public function index()
     {
-        $users = User::with('roles', 'permissions')->get();
+        $users = User::with('roles', 'permissions')->paginate(100)->withQueryString();
         return view('users.index', compact('users'));
     }
 
@@ -35,6 +35,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
+            'branch_id' => 'required',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|exists:roles,id',
         ]);
@@ -42,6 +43,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'branch_id' => $request->branch_id,
             'password' => Hash::make($request->password),
         ]);
 

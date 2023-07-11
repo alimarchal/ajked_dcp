@@ -25,7 +25,7 @@ class PermissionsDemoSeeder extends Seeder
         Permission::create(['name' => 'delete']);
 
         // create roles and assign existing permissions
-        $role1 = Role::create(['name' => 'writer']);
+        $role1 = Role::create(['name' => 'branch']);
         $role1->givePermissionTo('create');
         $role1->givePermissionTo('edit');
 
@@ -38,6 +38,7 @@ class PermissionsDemoSeeder extends Seeder
         // create demo users
         $user = \App\Models\User::factory()->create([
             'name' => 'Example User',
+            'username' => 'branch',
             'email' => 'test@example.com',
             'password' => \Hash::make('123456'),
         ]);
@@ -45,6 +46,7 @@ class PermissionsDemoSeeder extends Seeder
 
         $user = \App\Models\User::factory()->create([
             'name' => 'Example Admin User',
+            'username' => 'admin',
             'email' => 'admin@example.com',
             'password' => \Hash::make('123456'),
         ]);
@@ -52,6 +54,7 @@ class PermissionsDemoSeeder extends Seeder
 
         $user = \App\Models\User::factory()->create([
             'name' => 'Ali Raza Marchal',
+            'username' => 'Super-Admin',
             'email' => 'kh.marchal@gmail.com',
             'password' => \Hash::make('123456'),
         ]);

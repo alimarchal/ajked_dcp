@@ -23,7 +23,7 @@
 
 
                     <table
-                        class="w-full text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
+                        class="w-full mb-4 text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
                         <thead class="text-black uppercase bg-gray-50 dark:bg-gray-700 ">
                         <tr>
                             <th scope="col" class="px-1 py-3 border border-black ">
@@ -87,7 +87,10 @@
                     </table>
 
 
+                    {{ $users->links() }}
+
                 </div>
+
             </div>
         </div>
     </div>

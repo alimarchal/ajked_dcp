@@ -23,7 +23,6 @@ class UpdateVoucherRequest extends FormRequest
     {
         return [
             //
-            'date' => 'required|date',
             'total_vouchers' => 'nullable|numeric',
             'amount' => 'nullable|numeric',
         ];

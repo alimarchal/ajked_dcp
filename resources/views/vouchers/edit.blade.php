@@ -11,14 +11,16 @@
                 <div class="p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
                     <!-- resources/views/vouchers/edit.blade.php -->
                     <x-validation-errors class="mb-4" />
+
                     <form method="POST" action="{{ route('voucher.update', $voucher->id) }}">
                         @csrf
                         @method('PUT')
-
+                        @role('Super-Admin|Admin')
                         <div>
                             <x-label for="date" value="{{ __('Date') }}" />
                             <x-input id="date" class="block mt-1 w-full" type="date" name="date" :value="old('date', \Carbon\Carbon::parse($voucher->date)->format('Y-m-d'))" required max="{{ date('Y-m-d') }}" />
                         </div>
+                        @endrole
 
                         <div class="mt-4">
                             <x-label for="total_vouchers" value="{{ __('Total Vouchers') }}" />

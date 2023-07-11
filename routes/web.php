@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\UserController;
+use App\Models\Voucher;
 use Illuminate\Support\Facades\Route;
+use Spatie\Permission\Models\Role;
+use Carbon\Carbon;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -15,11 +19,54 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
+
+
+
+
+
     return to_route('login');
 });
 
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
-    Route::get('/dashboard', function () { return view('dashboard'); })->name('dashboard');
+    Route::get('/dashboard', function () {
+
+        ini_set('max_execution_time', 300);
+
+//        $role1 = Role::find(1);
+//        foreach (\App\Models\Branch::all() as $branch)
+//        {
+////            echo $branch->bank_code_branch . $branch->bank_sdiv_code ."<br>";
+//            $user = \App\Models\User::factory()->create([
+//                'name' => $branch->bank_code_branch . $branch->bank_sdiv_code ,
+//                'username' => $branch->bank_code_branch . $branch->bank_sdiv_code ,
+//                'branch_id' => $branch->id,
+//                'email' => $branch->bank_code_branch . $branch->bank_sdiv_code .'@ajkced.gok.pk',
+//                'password' => \Hash::make('123456'),
+//            ]);
+//            $user->assignRole($role1);
+//        }
+
+
+
+
+        // Branch wise total vouchers
+        $branch_wise_total_vouchers = DB::table('vouchers')
+            ->join('branches', 'vouchers.branch_id', '=', 'branches.id')
+            ->select('branches.bank_name', 'vouchers.branch_id', DB::raw('COUNT(vouchers.branch_id) as total_vouchers'), DB::raw('SUM(vouchers.amount) as total_collection'))
+            ->groupBy('vouchers.branch_id')
+            ->get();
+
+        $startDate = Carbon::now()->subMonths(6)->startOfMonth();
+        $six_month_chart = DB::table('vouchers')
+            ->selectRaw("DATE_FORMAT(date, '%b') AS month_name")
+            ->selectRaw('SUM(amount) AS total_amount')
+            ->selectRaw('SUM(total_vouchers) AS total_vouchers')
+            ->where('date', '>=', $startDate)
+            ->groupBy(DB::raw('MONTH(date)'))
+            ->get();
+
+        return view('dashboard', compact('branch_wise_total_vouchers','six_month_chart'));
+    })->name('dashboard');
     //
     Route::resource('roles',\App\Http\Controllers\RoleController::class);
     Route::resource('permissions',\App\Http\Controllers\PermissionController::class);
