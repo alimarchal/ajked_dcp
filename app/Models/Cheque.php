@@ -8,10 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Voucher extends Model
+class Cheque extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
     protected $fillable = [
         'user_id',
         'branch_id',
@@ -20,7 +21,6 @@ class Voucher extends Model
         'amount',
         'entry_type',
     ];
-
 
     public function user(): BelongsTo
     {
@@ -32,6 +32,7 @@ class Voucher extends Model
     {
         return $this->belongsTo(Branch::class);
     }
+
 
     public function scopeStartsBefore(Builder $query, $date): Builder
     {
@@ -59,7 +60,5 @@ class Voucher extends Model
 
 
         }
-
-        return $query->whereBetween('date', [$date_from, $date_to]);
     }
 }

@@ -58,7 +58,7 @@
                                 </div>
 
                                 <div class="mt-1 text-base font-extrabold text-black">
-                                    Total Vouchers
+                                    Total Vouchers {{ Carbon\Carbon::now()->format('M-Y') }}
                                 </div>
                             </div>
                             <div class="col-span-1 flex items-center justify-end">
@@ -79,7 +79,7 @@
                                     @endif
                                 </div>
                                 <div class="mt-1 text-base  font-extrabold text-black">
-                                    Total Collection
+                                    Total Collection  {{ Carbon\Carbon::now()->format('M-y') }}
                                 </div>
                             </div>
                             <div class="col-span-1 flex items-center justify-end">
@@ -91,7 +91,7 @@
                 </a>
                 @endrole
 
-                @role('Super-Admin')
+                @role('Super-Admin|admin')
                     <a href="#" class="transform  hover:scale-110 transition duration-300 shadow-xl rounded-lg col-span-12 sm:col-span-6 xl:col-span-3 intro-y bg-white">
                         <div class="p-5">
                             <div class="grid grid-cols-3 gap-1">
@@ -141,7 +141,7 @@
                                     </div>
 
                                     <div class="mt-1 text-base font-extrabold text-black">
-                                        Total Vouchers
+                                         Vouchers  {{ Carbon\Carbon::now()->format('M-Y') }}
                                     </div>
                                 </div>
                                 <div class="col-span-1 flex items-center justify-end">
@@ -162,7 +162,7 @@
                                         @endif
                                     </div>
                                     <div class="mt-1 text-base  font-extrabold text-black">
-                                        Total Collection
+                                         Collection  {{ Carbon\Carbon::now()->format('M-Y') }}
                                     </div>
                                 </div>
                                 <div class="col-span-1 flex items-center justify-end">
@@ -176,14 +176,14 @@
 
 
             @role('Super-Admin|Admin')
-            <div class="grid grid-cols-2 gap-4 pt-8">
-                <div class="bg-white  shadow-xl rounded-lg p-4" id="chart2">
+            <div class="grid grid-cols-1 gap-4 pt-8">
+                <div class="bg-white shadow-xl rounded-lg p-4" id="chart2">
                     <div id="chart2"></div>
                 </div>
 
-{{--                <div class="bg-white  shadow-xl rounded-lg p-4" id="chart">--}}
-{{--                    <div id="chart"></div>--}}
-{{--                </div>--}}
+                <div class="bg-white  shadow-xl rounded-lg p-4" id="chart">
+                    <div id="chart"></div>
+                </div>
             </div>
             @endrole
 
@@ -194,7 +194,7 @@
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
         <script>
 
-            {{--var options = {--}}
+            // var options = {
             {{--    series: [@foreach($branch_wise_total_vouchers as $bw) {{$bw->total_vouchers}}, @endforeach],--}}
             {{--    chart: {--}}
             {{--        width: 500,--}}
@@ -215,20 +215,17 @@
             {{--    }]--}}
             {{--};--}}
 
-            {{--var chart = new ApexCharts(document.querySelector("#chart"), options);--}}
-            {{--chart.render();--}}
 
 
 
 
-            var options2 = {
+
+
+            var options = {
                 series: [{
-                    name: 'Vouchers',
-                    data: [@foreach($six_month_chart as $row) {{$row->total_vouchers}}, @endforeach]
-                }, {
-                    name: 'Collections',
-                    data: [@foreach($six_month_chart as $row) {{ $row->total_amount }}, @endforeach]
-                },
+                    name: 'Vouchers: ',
+                    data: [@foreach($month_wise_day as $row) {{ ($row->total_vouchers) }}, @endforeach]
+                }
                 ],
                 chart: {
                     type: 'bar',
@@ -250,11 +247,63 @@
                     colors: ['transparent']
                 },
                 xaxis: {
-                    categories: [@foreach($six_month_chart as $row) '{{$row->month_name}}', @endforeach],
+                    categories: [@foreach($month_wise_day as $row) '{{$row->day}}', @endforeach],
                 },
                 yaxis: {
                     title: {
-                        text: 'Last 6 months PKR (thousands)'
+                        text: 'Last 30 days vouchers'
+                    }
+                },
+                fill: {
+                    opacity: 1
+                },
+                tooltip: {
+                    y: {
+                        formatter: function (val) {
+                            return " " + val + " "
+                        }
+                    }
+                }
+            };
+
+            var chart = new ApexCharts(document.querySelector("#chart"), options);
+            chart.render();
+
+
+
+
+
+            var options2 = {
+                series: [{
+                    name: 'Amount (million)',
+                    data: [@foreach($month_wise_day as $row) {{ ($row->total_amount/1000000) }}, @endforeach]
+                }
+                ],
+                chart: {
+                    type: 'bar',
+                    height: 350
+                },
+                plotOptions: {
+                    bar: {
+                        horizontal: false,
+                        columnWidth: '55%',
+                        endingShape: 'rounded'
+                    },
+                },
+                dataLabels: {
+                    enabled: false
+                },
+                stroke: {
+                    show: true,
+                    width: 2,
+                    colors: ['transparent']
+                },
+                xaxis: {
+                    categories: [@foreach($month_wise_day as $row) '{{$row->day}}', @endforeach],
+                },
+                yaxis: {
+                    title: {
+                        text: 'Last 30 days PKR (thousands)'
                     }
                 },
                 fill: {

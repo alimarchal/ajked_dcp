@@ -23,7 +23,7 @@
 
             @can('create')
                 <div class="flex justify-center items-center float-right">
-                    <a href="{{ route('voucher.create') }}"
+                    <a href="{{ route('bt.create') }}"
                        class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
                        title="Create New Voucher">
                         <img src="https://img.icons8.com/?size=512&id=f3o1AGoVZ2Un&format=png" class="h-5 w-5" alt="">
@@ -139,17 +139,17 @@
                                 User
                             </th>
 
-                            <th scope="col" class="px-1 py-3 border border-black text-center">
-                                Branch Name
-                            </th>
+{{--                            <th scope="col" class="px-1 py-3 border border-black text-center">--}}
+{{--                                Branch Name--}}
+{{--                            </th>--}}
 
-                            <th scope="col" class="px-1 py-3 border border-black text-center">
-                                Div
-                            </th>
+{{--                            <th scope="col" class="px-1 py-3 border border-black text-center">--}}
+{{--                                Div--}}
+{{--                            </th>--}}
 
-                            <th scope="col" class="px-1 py-3 border border-black text-center">
-                                Sub Div
-                            </th>
+{{--                            <th scope="col" class="px-1 py-3 border border-black text-center">--}}
+{{--                                Sub Div--}}
+{{--                            </th>--}}
                             <th scope="col" class="px-1 py-3 border border-black text-center">
                                 Date
                             </th>
@@ -178,18 +178,18 @@
 
 
 
-                                <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">
-                                    {{ $voucher->branch->bank_name }}
-                                </td>
+{{--                                <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">--}}
+{{--                                    {{ $voucher->branch->bank_name }}--}}
+{{--                                </td>--}}
 
 
-                                <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">
-                                    {{ $voucher->branch->bank_div_name }}
-                                </td>
+{{--                                <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">--}}
+{{--                                    {{ $voucher->branch->bank_div_name }}--}}
+{{--                                </td>--}}
 
-                                <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">
-                                    {{ $voucher->branch->bank_sdiv_name }}
-                                </td>
+{{--                                <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">--}}
+{{--                                    {{ $voucher->branch->bank_sdiv_name }}--}}
+{{--                                </td>--}}
 
                                 <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">
                                     {{ \Carbon\Carbon::parse($voucher->date)->format('d-m-Y') }}
@@ -206,10 +206,10 @@
                                 </td>
                                 <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center print:hidden">
 
-                                    <a href="{{ route('voucher.edit', $voucher->id) }}"
+                                    <a href="{{ route('bt.edit', $voucher->id) }}"
                                        class="inline-flex items-center px-4 py-2 bg-green-800 dark:bg-green-200 border border-transparent rounded-md font-semibold text-xs text-white dark:text-gray-800 uppercase tracking-widest hover:bg-gray-700 dark:hover:bg-white focus:bg-gray-700 dark:focus:bg-white active:bg-gray-900 dark:active:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 transition ease-in-out duration-150">Edit</a>
                                     @can('delete')
-                                        <form action="{{ route('voucher.destroy', $voucher->id) }}" method="POST"
+                                        <form action="{{ route('bt.destroy', $voucher->id) }}" method="POST"
                                               onsubmit="return confirm('Are you sure you want to delete this role?');"
                                               class="inline-block">
                                             @csrf
@@ -227,7 +227,7 @@
                         </tbody>
                         <tfoot>
                             <tr class="bg-white  border-b dark:bg-gray-800 dark:border-black text-left">
-                                <td class="border px-2 py-2 border-black  font-extrabold text-black text-right dark:text-white" colspan="6">
+                                <td class="border px-2 py-2 border-black  font-extrabold text-black text-right dark:text-white" colspan="3">
                                     Total:
                                 </td>
 

@@ -46,9 +46,6 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
 //            $user->assignRole($role1);
 //        }
 
-
-
-
         // Branch wise total vouchers
         $branch_wise_total_vouchers = DB::table('vouchers')
             ->join('branches', 'vouchers.branch_id', '=', 'branches.id')
@@ -56,16 +53,24 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
             ->groupBy('vouchers.branch_id')
             ->get();
 
-        $startDate = Carbon::now()->subMonths(6)->startOfMonth();
-        $six_month_chart = DB::table('vouchers')
-            ->selectRaw("DATE_FORMAT(date, '%b') AS month_name")
-            ->selectRaw('SUM(amount) AS total_amount')
-            ->selectRaw('SUM(total_vouchers) AS total_vouchers')
+        $startDate = Carbon::now()->startOfMonth();
+
+//        $six_month_chart = DB::table('vouchers')
+//            ->selectRaw("DATE_FORMAT(date, '%b') AS month_name")
+//            ->selectRaw('SUM(amount) AS total_amount')
+//            ->selectRaw('SUM(total_vouchers) AS total_vouchers')
+//            ->where('date', '>=', $startDate)
+//            ->groupBy(DB::raw('MONTH(date)'))
+//            ->get();
+
+        $month_wise_day = DB::table('vouchers')
+            ->select(DB::raw("DATE_FORMAT(date, '%d') as day"), DB::raw("sum(amount) as total_amount"), DB::raw("sum(total_vouchers) as total_vouchers"))
             ->where('date', '>=', $startDate)
-            ->groupBy(DB::raw('MONTH(date)'))
+            ->groupBy(DB::raw("day(date)"))
             ->get();
 
-        return view('dashboard', compact('branch_wise_total_vouchers','six_month_chart'));
+        return view('dashboard', compact('branch_wise_total_vouchers','month_wise_day'));
+
     })->name('dashboard');
     //
     Route::resource('roles',\App\Http\Controllers\RoleController::class);
@@ -77,5 +82,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
     Route::resource('voucher',\App\Http\Controllers\VoucherController::class);
+
+    Route::resource('cheque',\App\Http\Controllers\ChequeController::class);
+    Route::resource('bt',\App\Http\Controllers\BtController::class);
+
     Route::resource('branch',\App\Http\Controllers\BranchController::class);
 });

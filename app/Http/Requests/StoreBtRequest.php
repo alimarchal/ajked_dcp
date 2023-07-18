@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreBranchRequest extends FormRequest
+class StoreBtRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,6 +23,8 @@ class StoreBranchRequest extends FormRequest
     {
         return [
             //
+            'total_vouchers' => 'nullable|numeric',
+            'amount' => 'nullable|numeric',
         ];
     }
 }

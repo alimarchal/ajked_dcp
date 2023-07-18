@@ -21,7 +21,14 @@
                         {{ __('Vouchers') }}
                     </x-nav-link>
 
-
+                    @role('admin|Super-Admin')
+                    <x-nav-link href="{{ route('cheque.index') }}" :active="request()->routeIs('cheque.*')">
+                        {{ __('Cheques') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('bt.index') }}" :active="request()->routeIs('bt.*')">
+                        {{ __('Bts') }}
+                    </x-nav-link>
+                    @endrole
 
                     @role('Super-Admin')
 

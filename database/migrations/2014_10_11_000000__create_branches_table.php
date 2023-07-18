@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('bank_sdiv_name')->nullable();
             $table->unsignedBigInteger('bank_div_code')->nullable();
             $table->string('bank_div_name')->nullable();
+            $table->string('circle')->nullable();
             $table->timestamps();
         });
     }
