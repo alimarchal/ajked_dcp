@@ -20,6 +20,11 @@
                         </div>
 
                         <div class="mt-4">
+                            <x-label for="username" value="{{ __('Username') }}" />
+                            <x-input id="username" class="block mt-1 w-full" type="text" name="username" :value="old('username')" required autofocus autocomplete="username" />
+                        </div>
+
+                        <div class="mt-4">
                             <x-label for="email" value="{{ __('Email') }}" />
                             <x-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required autocomplete="username" />
                         </div>
@@ -28,8 +33,8 @@
                             <x-label for="branch_id" value="{{ __('Branch') }}" />
                             <select name="branch_id" id="branch_id"  class="block mt-1 w-full border-gray-300 dark:border-gray-700 rounded-md shadow-sm" >
                                 <option value="">Select a branch</option>
-                                @foreach (\App\Models\Branch::all() as $branch)
-                                    <option value="{{ $branch->id }}" {{ old('branch_id') == $branch->id ? 'selected' : '' }}>{{ $branch->bank_name }} - {{ $branch->bank_div_name }} - {{ $branch->bank_sdiv_name }}</option>
+                                @foreach (\App\Models\Branch::orderBy('bank_div_code')->get() as $branch)
+                                    <option value="{{ $branch->id }}" {{ old('branch_id') == $branch->id ? 'selected' : '' }}>{{ $branch->bank_name }} - DIV:{{ $branch->bank_div_name }} - SUBD:{{ $branch->bank_sdiv_name }} - Circle: {{ $branch->circle }}</option>
                                 @endforeach
                             </select>
                         </div>

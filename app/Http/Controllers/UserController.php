@@ -32,8 +32,9 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
-            'name' => 'required|string|max:255',
+            'username' => 'required|string|unique:users',
             'email' => 'required|email|unique:users',
             'branch_id' => 'required',
             'password' => 'required|string|min:8|confirmed',
@@ -43,6 +44,7 @@ class UserController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'username' => $request->username,
             'branch_id' => $request->branch_id,
             'password' => Hash::make($request->password),
         ]);
@@ -65,6 +67,7 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email,' . $user->id,
+            'username' => 'required|username|unique:users,username,' . $user->id,
             'permissions' => 'array',
             'permissions.*' => 'exists:permissions,id',
         ]);

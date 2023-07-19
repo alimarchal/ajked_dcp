@@ -33,6 +33,9 @@
                                 Name
                             </th>
                             <th scope="col" class="px-1 py-3 border border-black  text-center">
+                                Username
+                            </th>
+                            <th scope="col" class="px-1 py-3 border border-black  text-center">
                                 Email
                             </th>
                             <th scope="col" class="px-1 py-3 border border-black  text-center">
@@ -55,8 +58,12 @@
                                     <a href="{{ route('users.edit', $user->id) }}" class="hover:underline text-blue-600">{{ $user->name }}</a>
                                 </th>
                                 <th class="border px-2 py-2 border-black font-medium text-black dark:text-white">
+                                    {{ $user->username }}
+                                </th>
+                                <th class="border px-2 py-2 border-black font-medium text-black dark:text-white">
                                     {{ $user->email }}
                                 </th>
+
                                 <th class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">
                                     @foreach ($user->roles as $role)
                                         {{ $role->name }}

@@ -58,42 +58,100 @@
                     @endrole
 
 
-                    @role('Super-Admin|Admin')
+                    @role('Super-Admin|admin|circle|division|sub-division')
                     <div>
                         <label for="branch_id" class="block text-gray-700 font-bold mb-2">Branch Name</label>
                         <select id="branch_id" name="filter[branch_id]"
                                 class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500">
                             <option value="">None</option>
-                            @foreach(\App\Models\Branch::all() as $branch)
-                                <option value="{{$branch->id}}">{{ $branch->bank_name }}</option>
-                            @endforeach
+
+                            @if(Auth::user()->hasRole(['Super-Admin','admin']))
+                                @foreach(\App\Models\Branch::all() as $branch)
+                                    <option value="{{$branch->id}}">{{ $branch->bank_name }}</option>
+                                @endforeach
+                            @elseif(Auth::user()->hasRole(['circle']))
+                                @foreach(\App\Models\Branch::where('circle', Auth::user()->branch->circle)->get() as $branch)
+                                    <option value="{{$branch->id}}">{{ $branch->bank_name }}</option>
+                                @endforeach
+                            @elseif(Auth::user()->hasRole(['division']))
+                                @foreach(\App\Models\Branch::where('bank_div_code', Auth::user()->branch->bank_div_code)->get() as $branch)
+                                    <option value="{{$branch->id}}">{{ $branch->bank_name }}</option>
+                                @endforeach
+                            @elseif(Auth::user()->hasRole(['sub-division']))
+                                @foreach(\App\Models\Branch::where('bank_sdiv_code', Auth::user()->branch->bank_sdiv_code)->get() as $branch)
+                                    <option value="{{$branch->id}}">{{ $branch->bank_name }}</option>
+                                @endforeach
+                            @endif
+
+
                         </select>
                     </div>
 
 
                     <div>
                         <label for="bank_div_name" class="block text-gray-700 font-bold mb-2">Division</label>
-                        <select id="bank_div_name" name="filter[branch.bank_div_name]" class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500">
+                        <select id="bank_div_name" name="filter[branch.bank_div_name]"
+                                class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500">
                             <option value="">None</option>
-                            @foreach(\App\Models\Branch::orderBy('bank_div_name', 'asc')->groupBy('bank_div_name')->get() as $branch)
-                                <option value="{{ $branch->bank_div_name }}">{{ $branch->bank_div_name }}</option>
-                            @endforeach
+
+
+
+                            @if(Auth::user()->hasRole(['Super-Admin','admin']))
+                                @foreach(\App\Models\Branch::orderBy('bank_div_name', 'asc')->groupBy('bank_div_name')->get() as $branch)
+                                    <option value="{{ $branch->bank_div_name }}">{{ $branch->bank_div_name }}</option>
+                                @endforeach
+                            @elseif(Auth::user()->hasRole(['circle']))
+                                @foreach(\App\Models\Branch::where('circle', Auth::user()->branch->circle)->orderBy('bank_div_name', 'asc')->groupBy('bank_div_name')->get() as $branch)
+                                    <option value="{{ $branch->bank_div_name }}">{{ $branch->bank_div_name }}</option>
+                                @endforeach
+                            @elseif(Auth::user()->hasRole(['division']))
+                                @foreach(\App\Models\Branch::where('bank_div_code', Auth::user()->branch->bank_div_code)->orderBy('bank_div_name', 'asc')->groupBy('bank_div_name')->get() as $branch)
+                                    <option value="{{ $branch->bank_div_name }}">{{ $branch->bank_div_name }}</option>
+                                @endforeach
+                            @elseif(Auth::user()->hasRole(['sub-division']))
+                                @foreach(\App\Models\Branch::where('bank_sdiv_code', Auth::user()->branch->bank_sdiv_code)->orderBy('bank_div_name', 'asc')->groupBy('bank_div_name')->get() as $branch)
+                                    <option value="{{ $branch->bank_div_name }}">{{ $branch->bank_div_name }}</option>
+                                @endforeach
+                            @endif
+
                         </select>
                     </div>
 
 
                     <div>
                         <label for="bank_sdiv_name" class="block text-gray-700 font-bold mb-2">Sub Division</label>
-                        <select id="bank_sdiv_name" name="filter[branch.bank_sdiv_name]" class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500">
+                        <select id="bank_sdiv_name" name="filter[branch.bank_sdiv_name]"
+                                class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500">
                             <option value="">None</option>
-                            @foreach(\App\Models\Branch::orderBy('bank_sdiv_name', 'asc')->groupBy('bank_sdiv_name')->get() as $branch)
-                                <option value="{{ $branch->bank_sdiv_name }}">{{ $branch->bank_sdiv_name }}</option>
-                            @endforeach
+
+
+
+                            @if(Auth::user()->hasRole(['Super-Admin','admin']))
+                                @foreach(\App\Models\Branch::orderBy('bank_sdiv_name', 'asc')->groupBy('bank_sdiv_name')->get() as $branch)
+                                    <option value="{{ $branch->bank_sdiv_name }}">{{ $branch->bank_sdiv_name }}</option>
+                                @endforeach
+                            @elseif(Auth::user()->hasRole(['circle']))
+                                @foreach(\App\Models\Branch::where('circle', Auth::user()->branch->circle)->orderBy('bank_div_name', 'asc')->orderBy('bank_sdiv_name', 'asc')->groupBy('bank_sdiv_name')->get() as $branch)
+                                    <option value="{{ $branch->bank_sdiv_name }}">{{ $branch->bank_sdiv_name }}</option>
+                                @endforeach
+                            @elseif(Auth::user()->hasRole(['division']))
+                                @foreach(\App\Models\Branch::where('bank_div_code', Auth::user()->branch->bank_div_code)->orderBy('bank_sdiv_name', 'asc')->groupBy('bank_sdiv_name')->get() as $branch)
+                                    <option value="{{ $branch->bank_sdiv_name }}">{{ $branch->bank_sdiv_name }}</option>
+                                @endforeach
+                            @elseif(Auth::user()->hasRole(['sub-division']))
+                                @foreach(\App\Models\Branch::where('bank_sdiv_code', Auth::user()->branch->bank_sdiv_code)->orderBy('bank_sdiv_name', 'asc')->groupBy('bank_sdiv_name')->get() as $branch)
+                                    <option value="{{ $branch->bank_sdiv_name }}">{{ $branch->bank_sdiv_name }}</option>
+                                @endforeach
+                            @endif
+
+
                         </select>
                     </div>
                     <div>
                         <label for="date_range" class="block text-gray-700 font-bold mb-2">Date Range</label>
-                        <input class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500" type="search" readonly name="filter[starts_before]" id="date_range">
+                        <input
+                            class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
+                            type="search" readonly name="filter[starts_before]" id="date_range">
                     </div>
                     @endrole
 
@@ -126,7 +184,8 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg print:shadow-none">
-                <div class="overflow-x-auto p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+                <div
+                    class="overflow-x-auto p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
                     <!-- resources/views/users/create.blade.php -->
                     <table
                         class="mb-4 w-full text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
@@ -177,7 +236,6 @@
                                 </td>
 
 
-
                                 <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">
                                     {{ $voucher->branch->bank_name }}
                                 </td>
@@ -226,26 +284,27 @@
                         @endforeach
                         </tbody>
                         <tfoot>
-                            <tr class="bg-white  border-b dark:bg-gray-800 dark:border-black text-left">
-                                <td class="border px-2 py-2 border-black  font-extrabold text-black text-right dark:text-white" colspan="6">
-                                    Total:
-                                </td>
+                        <tr class="bg-white  border-b dark:bg-gray-800 dark:border-black text-left">
+                            <td class="border px-2 py-2 border-black  font-extrabold text-black text-right dark:text-white"
+                                colspan="6">
+                                Total:
+                            </td>
 
-                                <td class="border px-2 py-2 border-black  font-extrabold text-black text-center dark:text-white">
-                                    {{ number_format($vouchers->sum('total_vouchers'),2) }}
-                                </td>
+                            <td class="border px-2 py-2 border-black  font-extrabold text-black text-center dark:text-white">
+                                {{ number_format($vouchers->sum('total_vouchers'),2) }}
+                            </td>
 
-                                <td class="border px-2 py-2 border-black font-extrabold text-black text-center dark:text-white">
-                                    {{ number_format($vouchers->sum('amount'),2) }}
-                                </td>
-                                <td class="border px-2 py-2 border-black font-medium text-black text-center dark:text-white print:hidden" >
-                                </td>
-                            </tr>
+                            <td class="border px-2 py-2 border-black font-extrabold text-black text-center dark:text-white">
+                                {{ number_format($vouchers->sum('amount'),2) }}
+                            </td>
+                            <td class="border px-2 py-2 border-black font-medium text-black text-center dark:text-white print:hidden">
+                            </td>
+                        </tr>
                         </tfoot>
                     </table>
 
 
-{{--                    {{ $vouchers->links() }}--}}
+                    {{--                    {{ $vouchers->links() }}--}}
 
                 </div>
             </div>

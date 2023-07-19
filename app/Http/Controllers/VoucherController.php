@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreVoucherRequest;
 use App\Http\Requests\UpdateVoucherRequest;
+use App\Models\Branch;
 use App\Models\Voucher;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,15 +22,53 @@ class VoucherController extends Controller
     public function index(Request $request)
     {
 
+
+
+//        dd(Auth::user()->hasRole(['circle']));
         // Check if the user has the "Super-Admin" role
         if (Auth::user()->hasRole(['Super-Admin', 'admin'])) {
-
             $vouchers = QueryBuilder::for(Voucher::class)
                 ->allowedFilters(['vouchers.date', 'branch.bank_div_name', 'branch.bank_sdiv_name', 'vouchers.branch_id', AllowedFilter::exact('branch_id'), AllowedFilter::scope('starts_before')])
                 ->allowedIncludes(['user', 'branch'])
-//                ->join('branches', 'vouchers.branch_id', '=', 'branches.id')
                 ->orderBy('vouchers.date', 'desc')
                 ->get();
+
+        } elseif (Auth::user()->hasRole(['circle'])) {
+
+            $circle = Auth::user()->branch->circle;
+            $branches = Branch::where('circle', $circle)->pluck('id')->toArray();
+
+            $vouchers = QueryBuilder::for(Voucher::class)
+                ->allowedFilters(['vouchers.date', 'branch.bank_div_name', 'branch.bank_sdiv_name', 'vouchers.branch_id', AllowedFilter::exact('date'), AllowedFilter::exact('branch_id'), AllowedFilter::scope('starts_before')])
+                ->allowedIncludes(['user', 'branch'])
+                ->whereIn('branch_id', $branches)
+                ->orderBy('vouchers.date', 'desc')
+                ->get();
+
+        } elseif (Auth::user()->hasRole(['division'])) {
+
+            $division = Auth::user()->branch->bank_div_code;
+            $branches = Branch::where('bank_div_code', $division)->pluck('id')->toArray();
+
+            $vouchers = QueryBuilder::for(Voucher::class)
+                ->allowedFilters(['vouchers.date', 'branch.bank_div_name', 'branch.bank_sdiv_name', 'vouchers.branch_id', AllowedFilter::exact('date'), AllowedFilter::exact('branch_id'), AllowedFilter::scope('starts_before')])
+                ->allowedIncludes(['user', 'branch'])
+                ->whereIn('branch_id', $branches)
+                ->orderBy('vouchers.date', 'desc')
+                ->get();
+
+        } elseif (Auth::user()->hasRole(['sub-division'])) {
+
+            $sub_division = Auth::user()->branch->bank_sdiv_code;
+            $branches = Branch::where('bank_sdiv_code', $sub_division)->pluck('id')->toArray();
+
+            $vouchers = QueryBuilder::for(Voucher::class)
+                ->allowedFilters(['vouchers.date', 'branch.bank_div_name', 'branch.bank_sdiv_name', 'vouchers.branch_id', AllowedFilter::exact('date'), AllowedFilter::exact('branch_id'), AllowedFilter::scope('starts_before')])
+                ->allowedIncludes(['user', 'branch'])
+                ->whereIn('branch_id', $branches)
+                ->orderBy('vouchers.date', 'desc')
+                ->get();
+
         } else {
             $vouchers = QueryBuilder::for(Voucher::with(['user', 'branch']))
                 ->allowedFilters([AllowedFilter::exact('date')])
@@ -96,7 +135,7 @@ class VoucherController extends Controller
     {
         $today = now()->format('Y-m-d'); // Get today's date
 
-        if (Auth::user()->hasRole(['Super-Admin', 'Admin'])) {
+        if (Auth::user()->hasRole(['Super-Admin', 'admin'])) {
             return view('vouchers.edit', compact('voucher'));
         } else {
             if ($voucher->date != $today) {
