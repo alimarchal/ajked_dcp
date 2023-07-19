@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\UserController;
 use App\Models\Voucher;
 use Illuminate\Support\Facades\Route;
@@ -82,9 +83,14 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
 
     Route::resource('voucher',\App\Http\Controllers\VoucherController::class);
-
     Route::resource('cheque',\App\Http\Controllers\ChequeController::class);
     Route::resource('bt',\App\Http\Controllers\BtController::class);
-
     Route::resource('branch',\App\Http\Controllers\BranchController::class);
+
+
+    //reports
+    Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('/reports/missing', [ReportController::class, 'missingBranches'])->name('reports.missing');
+
+
 });
