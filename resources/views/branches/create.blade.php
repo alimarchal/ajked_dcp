@@ -62,4 +62,11 @@
             </div>
         </div>
     </div>
+    @push('modals')
+        <script>
+            $('form').submit(function(){
+                $(this).find(':submit').attr('disabled','disabled');
+            });
+        </script>
+    @endpush
 </x-app-layout>

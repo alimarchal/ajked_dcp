@@ -187,8 +187,7 @@
                 <div
                     class="overflow-x-auto p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
                     <!-- resources/views/users/create.blade.php -->
-                    <table
-                        class="mb-4 w-full text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
+                    <table class="mb-4 w-full text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
                         <thead class="text-black uppercase bg-gray-50 dark:bg-gray-700 ">
                         <tr>
                             <th scope="col" class="px-1 py-3 border border-black">
@@ -231,12 +230,13 @@
                                 <td class="border px-2 py-2 border-black font-medium text-black dark:text-white">
                                     {{ $voucher->id }}
                                 </td>
+
                                 <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">
-                                    {{ $voucher->user->name }}
+                                    {{ $voucher->user->username }}
                                 </td>
 
 
-                                <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">
+                                <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center" style="font-size: 12px;">
                                     {{ $voucher->branch->bank_name }}
                                 </td>
 
