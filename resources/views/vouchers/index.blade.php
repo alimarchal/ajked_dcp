@@ -1,15 +1,15 @@
 <x-app-layout>
     @push('custom_headers')
-        <link rel="stylesheet" href="https://cms.ajkced.gok.pk/daterange/daterangepicker.min.css">
-        <script src="https://cms.ajkced.gok.pk/daterange/jquery-3.6.0.min.js"></script>
-        <script src="https://cms.ajkced.gok.pk/daterange/moment.min.js"></script>
-        <script src="https://cms.ajkced.gok.pk/daterange/knockout-3.5.1.js" defer></script>
-        <script src="https://cms.ajkced.gok.pk/daterange/daterangepicker.min.js" defer></script>
+        <link rel="stylesheet" href="{{ url('jsandcss/daterangepicker.min.css') }}">
+        <script src="{{ url('jsandcss/jquery-3.6.0.min.js') }}"></script>
+        <script src="{{ url('jsandcss/moment.min.js') }}"></script>
+        <script src="{{ url('jsandcss/knockout-3.5.1.js') }}" defer></script>
+        <script src="{{ url('jsandcss/daterangepicker.min.js') }}" defer></script>
     @endpush
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight inline-block">
             @role('Super-Admin|admin')
-            {{ __("Collection Lists'") }}
+            {{ __("Collection Lists") }}
             @endrole
 
 
@@ -29,6 +29,7 @@
                         <img src="https://img.icons8.com/?size=512&id=f3o1AGoVZ2Un&format=png" class="h-5 w-5" alt="">
                         <span class="hidden md:inline-block ml-2">Create New Voucher</span>
                     </a>
+
                 </div>
             @endcan
             <a href="javascript:;" id="toggle"
@@ -41,6 +42,12 @@
                 </svg>
                 <span class="hidden md:inline-block ml-2" style="font-size: 14px;">Search Filters</span>
             </a>
+
+{{--                <button onclick="window.print()" class=" text-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-black dark:border-gray-200 dark:hover:bg-white dark:bg-gray-700 ml-2" title="Members List">--}}
+{{--                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">--}}
+{{--                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>--}}
+{{--                    </svg>--}}
+{{--                </button>--}}
         </div>
     </x-slot>
 
@@ -52,142 +59,25 @@
                     @role('branch')
                     <div>
                         <label for="start_date" class="block text-gray-700 font-bold mb-2">Start Date</label>
-                        <input type="date" name="filter[date]" value="{{ request('filter.date') }}" id="date"
-                               class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500">
+                        <input type="date" name="filter[date]" value="{{ request('filter.date') }}" id="date" class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500">
                     </div>
                     @endrole
-
-
-                    @role('Super-Admin|admin|circle|division|sub-division')
-                    <div>
-                        <label for="branch_id" class="block text-gray-700 font-bold mb-2">Branch Name</label>
-                        <select id="branch_id" name="filter[branch_id]"
-                                class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500">
-                            <option value="">None</option>
-
-                            @if(Auth::user()->hasRole(['Super-Admin','admin']))
-                                @foreach(\App\Models\Branch::all() as $branch)
-                                    <option value="{{$branch->id}}">{{ $branch->bank_name }}</option>
-                                @endforeach
-                            @elseif(Auth::user()->hasRole(['circle']))
-                                @foreach(\App\Models\Branch::where('circle', Auth::user()->branch->circle)->get() as $branch)
-                                    <option value="{{$branch->id}}">{{ $branch->bank_name }}</option>
-                                @endforeach
-                            @elseif(Auth::user()->hasRole(['division']))
-                                @foreach(\App\Models\Branch::where('bank_div_code', Auth::user()->branch->bank_div_code)->get() as $branch)
-                                    <option value="{{$branch->id}}">{{ $branch->bank_name }}</option>
-                                @endforeach
-                            @elseif(Auth::user()->hasRole(['sub-division']))
-                                @foreach(\App\Models\Branch::where('bank_sdiv_code', Auth::user()->branch->bank_sdiv_code)->get() as $branch)
-                                    <option value="{{$branch->id}}">{{ $branch->bank_name }}</option>
-                                @endforeach
-                            @endif
-
-
-                        </select>
-                    </div>
-
-
-                    <div>
-                        <label for="bank_div_name" class="block text-gray-700 font-bold mb-2">Division</label>
-                        <select id="bank_div_name" name="filter[branch.bank_div_name]"
-                                class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500">
-                            <option value="">None</option>
-
-
-
-                            @if(Auth::user()->hasRole(['Super-Admin','admin']))
-                                @foreach(\App\Models\Branch::orderBy('bank_div_name', 'asc')->groupBy('bank_div_name')->get() as $branch)
-                                    <option value="{{ $branch->bank_div_name }}">{{ $branch->bank_div_name }}</option>
-                                @endforeach
-                            @elseif(Auth::user()->hasRole(['circle']))
-                                @foreach(\App\Models\Branch::where('circle', Auth::user()->branch->circle)->orderBy('bank_div_name', 'asc')->groupBy('bank_div_name')->get() as $branch)
-                                    <option value="{{ $branch->bank_div_name }}">{{ $branch->bank_div_name }}</option>
-                                @endforeach
-                            @elseif(Auth::user()->hasRole(['division']))
-                                @foreach(\App\Models\Branch::where('bank_div_code', Auth::user()->branch->bank_div_code)->orderBy('bank_div_name', 'asc')->groupBy('bank_div_name')->get() as $branch)
-                                    <option value="{{ $branch->bank_div_name }}">{{ $branch->bank_div_name }}</option>
-                                @endforeach
-                            @elseif(Auth::user()->hasRole(['sub-division']))
-                                @foreach(\App\Models\Branch::where('bank_sdiv_code', Auth::user()->branch->bank_sdiv_code)->orderBy('bank_div_name', 'asc')->groupBy('bank_div_name')->get() as $branch)
-                                    <option value="{{ $branch->bank_div_name }}">{{ $branch->bank_div_name }}</option>
-                                @endforeach
-                            @endif
-
-                        </select>
-                    </div>
-
-
-                    <div>
-                        <label for="bank_sdiv_name" class="block text-gray-700 font-bold mb-2">Sub Division</label>
-                        <select id="bank_sdiv_name" name="filter[branch.bank_sdiv_name]"
-                                class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500">
-                            <option value="">None</option>
-
-
-
-                            @if(Auth::user()->hasRole(['Super-Admin','admin']))
-                                @foreach(\App\Models\Branch::orderBy('bank_sdiv_name', 'asc')->groupBy('bank_sdiv_name')->get() as $branch)
-                                    <option value="{{ $branch->bank_sdiv_name }}">{{ $branch->bank_sdiv_name }}</option>
-                                @endforeach
-                            @elseif(Auth::user()->hasRole(['circle']))
-                                @foreach(\App\Models\Branch::where('circle', Auth::user()->branch->circle)->orderBy('bank_div_name', 'asc')->orderBy('bank_sdiv_name', 'asc')->groupBy('bank_sdiv_name')->get() as $branch)
-                                    <option value="{{ $branch->bank_sdiv_name }}">{{ $branch->bank_sdiv_name }}</option>
-                                @endforeach
-                            @elseif(Auth::user()->hasRole(['division']))
-                                @foreach(\App\Models\Branch::where('bank_div_code', Auth::user()->branch->bank_div_code)->orderBy('bank_sdiv_name', 'asc')->groupBy('bank_sdiv_name')->get() as $branch)
-                                    <option value="{{ $branch->bank_sdiv_name }}">{{ $branch->bank_sdiv_name }}</option>
-                                @endforeach
-                            @elseif(Auth::user()->hasRole(['sub-division']))
-                                @foreach(\App\Models\Branch::where('bank_sdiv_code', Auth::user()->branch->bank_sdiv_code)->orderBy('bank_sdiv_name', 'asc')->groupBy('bank_sdiv_name')->get() as $branch)
-                                    <option value="{{ $branch->bank_sdiv_name }}">{{ $branch->bank_sdiv_name }}</option>
-                                @endforeach
-                            @endif
-
-
-                        </select>
-                    </div>
-                    <div>
-                        <label for="date_range" class="block text-gray-700 font-bold mb-2">Date Range</label>
-                        <input
-                            class="w-full px-3 py-2 border rounded-md text-gray-700 focus:outline-none focus:border-blue-500"
-                            type="search" readonly name="filter[starts_before]" id="date_range">
-                    </div>
-                    @endrole
-
-                    <div>
-                    </div>
-                    <div>
-                    </div>
-                    <div>
-                    </div>
-
-                    <div>
-                    </div>
-
-
-                    <div class="flex items-center justify-between">
-                        <button
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                            type="submit">
-                            Search
-                        </button>
-                    </div>
-
 
                 </div>
+
+
+                    <livewire:division-subdivision />
 
 
             </form>
         </div>
     </div>
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg print:shadow-none">
-                <div
-                    class="overflow-x-auto p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl  print:shadow-none">
+                <div class="overflow-x-auto bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
                     <!-- resources/views/users/create.blade.php -->
-                    <table class="mb-4 w-full text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
+                    <table class="w-full text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
                         <thead class="text-black uppercase bg-gray-50 dark:bg-gray-700 ">
                         <tr>
                             <th scope="col" class="px-1 py-3 border border-black">
@@ -257,7 +147,7 @@
                                 </td>
                                 <td class="border px-2 py-2 border-black font-medium text-black dark:text-white text-center">
                                     @if($voucher->amount > 999999)
-                                        {{ number_format($voucher->amount/1000000,3) }} M
+                                        {{ number_format($voucher->amount,2) }}
                                     @else
                                         {{ number_format($voucher->amount,2) }}
                                     @endif
@@ -304,7 +194,7 @@
                     </table>
 
 
-                    {{--                    {{ $vouchers->links() }}--}}
+                    {{ $vouchers->links() }}
 
                 </div>
             </div>

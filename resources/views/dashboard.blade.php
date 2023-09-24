@@ -14,7 +14,7 @@
                         <div class="grid grid-cols-3 gap-1">
                             <div class="col-span-2">
                                 <div class="text-3xl font-bold leading-8">
-                                    {{ \App\Models\Voucher::where('user_id', Auth::user()->id)->whereDay('date',now())->count() }}
+                                    {{ \App\Models\Voucher::where('user_id', Auth::user()->id)->whereDay('date',now())->sum('total_vouchers') }}
                                 </div>
 
                                 <div class="mt-1 text-base font-extrabold text-black">
@@ -32,11 +32,13 @@
                         <div class="grid grid-cols-3 gap-1">
                             <div class="col-span-2">
                                 <div class="text-3xl font-bold leading-8">
-                                    @if(\App\Models\Voucher::where('user_id', Auth::user()->id)->sum('amount') > 1000000)
-                                        {{ number_format(\App\Models\Voucher::where('user_id', Auth::user()->id)->whereDay('date',now())->sum('amount')/1000000,3) }} M
-                                    @else
-                                        {{ number_format(\App\Models\Voucher::where('user_id', Auth::user()->id)->whereDay('date',now())->sum('amount'),2) }}
-                                    @endif
+{{--                                    @if(\App\Models\Voucher::where('user_id', Auth::user()->id)->sum('amount') > 1000000)--}}
+{{--                                        {{ number_format(\App\Models\Voucher::where('user_id', Auth::user()->id)->whereDay('date',now())->sum('amount')/1000000,3) }} M--}}
+{{--                                    @else--}}
+{{--                                        {{ number_format(\App\Models\Voucher::where('user_id', Auth::user()->id)->whereDay('date',now())->sum('amount'),2) }}--}}
+{{--                                    @endif--}}
+                                    {{ number_format(\App\Models\Voucher::where('user_id', Auth::user()->id)->whereDay('date',now())->sum('amount'),2) }}
+
                                 </div>
                                 <div class="mt-1 text-base  font-extrabold text-black">
                                     Today Collection
@@ -54,7 +56,7 @@
                         <div class="grid grid-cols-3 gap-1">
                             <div class="col-span-2">
                                 <div class="text-3xl font-bold leading-8">
-                                    {{ \App\Models\Voucher::where('user_id', Auth::user()->id)->whereMonth('date',now())->count() }}
+                                    {{ \App\Models\Voucher::where('user_id', Auth::user()->id)->whereMonth('date',now())->sum('total_vouchers') }}
                                 </div>
 
                                 <div class="mt-1 text-base font-extrabold text-black">
@@ -72,11 +74,14 @@
                         <div class="grid grid-cols-3 gap-1">
                             <div class="col-span-2">
                                 <div class="text-3xl font-bold leading-8">
-                                    @if(\App\Models\Voucher::where('user_id', Auth::user()->id)->sum('amount') > 1000000)
-                                        {{ number_format(\App\Models\Voucher::where('user_id', Auth::user()->id)->whereMonth('date',now())->sum('amount')/1000000,3) }} M
-                                    @else
+{{--                                    @if(\App\Models\Voucher::where('user_id', Auth::user()->id)->sum('amount') > 1000000)--}}
+{{--                                        {{ number_format(\App\Models\Voucher::where('user_id', Auth::user()->id)->whereMonth('date',now())->sum('amount')/1000000,3) }} M--}}
+{{--                                    @else--}}
+{{--                                        {{ number_format(\App\Models\Voucher::where('user_id', Auth::user()->id)->whereMonth('date',now())->sum('amount'),2) }}--}}
+{{--                                    @endif--}}
+
                                         {{ number_format(\App\Models\Voucher::where('user_id', Auth::user()->id)->whereMonth('date',now())->sum('amount'),2) }}
-                                    @endif
+
                                 </div>
                                 <div class="mt-1 text-base  font-extrabold text-black">
                                     Total Collection  {{ Carbon\Carbon::now()->format('M-y') }}
@@ -97,7 +102,7 @@
                             <div class="grid grid-cols-3 gap-1">
                                 <div class="col-span-2">
                                     <div class="text-3xl font-bold leading-8">
-                                        {{ \App\Models\Voucher::whereDay('date',now())->count() }}
+                                        {{ \App\Models\Voucher::whereDay('date',now())->sum('total_vouchers') }}
                                     </div>
 
                                     <div class="mt-1 text-base font-extrabold text-black">
@@ -115,11 +120,14 @@
                             <div class="grid grid-cols-3 gap-1">
                                 <div class="col-span-2">
                                     <div class="text-3xl font-bold leading-8">
-                                        @if(\App\Models\Voucher::whereDay('date',now())->sum('amount') > 1000000)
-                                            {{ number_format(\App\Models\Voucher::whereDay('date',now())->sum('amount')/1000000,3) }} M
-                                        @else
+{{--                                        @if(\App\Models\Voucher::whereDay('date',now())->sum('amount') > 1000000)--}}
+{{--                                            {{ number_format(\App\Models\Voucher::whereDay('date',now())->sum('amount')/1000000,3) }} M--}}
+{{--                                        @else--}}
+{{--                                            {{ number_format(\App\Models\Voucher::whereDay('date',now())->sum('amount'),2) }}--}}
+{{--                                        @endif--}}
+
                                             {{ number_format(\App\Models\Voucher::whereDay('date',now())->sum('amount'),2) }}
-                                        @endif
+
                                     </div>
                                     <div class="mt-1 text-base  font-extrabold text-black">
                                         Today Collection
@@ -137,7 +145,7 @@
                             <div class="grid grid-cols-3 gap-1">
                                 <div class="col-span-2">
                                     <div class="text-3xl font-bold leading-8">
-                                        {{ \App\Models\Voucher::whereMonth('date',now())->count() }}
+                                        {{ \App\Models\Voucher::whereMonth('date',now())->sum('total_vouchers') }}
                                     </div>
 
                                     <div class="mt-1 text-base font-extrabold text-black">
@@ -155,11 +163,14 @@
                             <div class="grid grid-cols-3 gap-1">
                                 <div class="col-span-2">
                                     <div class="text-3xl font-bold leading-8">
-                                        @if(\App\Models\Voucher::whereMonth('date',now())->sum('amount') > 1000000)
-                                            {{ number_format(\App\Models\Voucher::whereMonth('date',now())->sum('amount')/1000000,3) }} M
-                                        @else
+{{--                                        @if(\App\Models\Voucher::whereMonth('date',now())->sum('amount') > 1000000)--}}
+{{--                                            {{ number_format(\App\Models\Voucher::whereMonth('date',now())->sum('amount')/1000000,3) }} M--}}
+{{--                                        @else--}}
+{{--                                            {{ number_format(\App\Models\Voucher::whereMonth('date',now())->sum('amount'),2) }}--}}
+{{--                                        @endif--}}
+
                                             {{ number_format(\App\Models\Voucher::whereMonth('date',now())->sum('amount'),2) }}
-                                        @endif
+
                                     </div>
                                     <div class="mt-1 text-base  font-extrabold text-black">
                                          Collection  {{ Carbon\Carbon::now()->format('M-Y') }}

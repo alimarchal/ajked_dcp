@@ -31,7 +31,7 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified'])->group(function () {
     Route::get('/dashboard', function () {
 
-        ini_set('max_execution_time', 300);
+//        ini_set('max_execution_time', 300);
 
 //        $role1 = Role::find(1);
 //        foreach (\App\Models\Branch::all() as $branch)

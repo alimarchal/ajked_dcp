@@ -103,7 +103,7 @@ class BtController extends Controller
             }
         }
 
-        return view('bt.edit', compact('cheque'));
+        return view('bts.edit', compact('cheque'));
     }
 
     /**

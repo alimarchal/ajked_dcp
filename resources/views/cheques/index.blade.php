@@ -1,15 +1,15 @@
 <x-app-layout>
     @push('custom_headers')
-        <link rel="stylesheet" href="https://cms.ajkced.gok.pk/daterange/daterangepicker.min.css">
-        <script src="https://cms.ajkced.gok.pk/daterange/jquery-3.6.0.min.js"></script>
-        <script src="https://cms.ajkced.gok.pk/daterange/moment.min.js"></script>
-        <script src="https://cms.ajkced.gok.pk/daterange/knockout-3.5.1.js" defer></script>
-        <script src="https://cms.ajkced.gok.pk/daterange/daterangepicker.min.js" defer></script>
+        <link rel="stylesheet" href="{{ url('jsandcss/daterangepicker.min.css') }}">
+        <script src="{{ url('jsandcss/jquery-3.6.0.min.js') }}"></script>
+        <script src="{{ url('jsandcss/moment.min.js') }}"></script>
+        <script src="{{ url('jsandcss/knockout-3.5.1.js') }}" defer></script>
+        <script src="{{ url('jsandcss/daterangepicker.min.js') }}" defer></script>
     @endpush
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight inline-block">
             @role('Super-Admin|admin')
-            {{ __("Collection Lists'") }}
+            {{ __("Cheques") }}
             @endrole
 
 
@@ -44,7 +44,7 @@
         </div>
     </x-slot>
 
-    <div class="max-w-7xl mx-auto mt-12 px-4 sm:px-6 lg:px-8 print:hidden" style="display: none" id="filters">
+    <div class="max-w-8xl mx-auto mt-12 px-4 sm:px-6 lg:px-8 print:hidden" style="display: none" id="filters">
         <div class="rounded-xl p-4 bg-white shadow-lg">
             <form action="">
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -118,18 +118,16 @@
 
 
                 </div>
-
-
             </form>
         </div>
     </div>
     <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg print:shadow-none">
-                <div class="overflow-x-auto p-6 lg:p-8 bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
+        <div class="max-w-8xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl  print:shadow-none">
+                <div class="overflow-x-auto bg-white dark:bg-gray-800 dark:bg-gradient-to-bl dark:from-gray-700/50 dark:via-transparent border-b border-gray-200 dark:border-gray-700">
                     <!-- resources/views/users/create.blade.php -->
                     <table
-                        class="mb-4 w-full text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
+                        class=" w-full text-sm border-collapse border border-slate-400 text-left text-black dark:text-gray-400">
                         <thead class="text-black uppercase bg-gray-50 dark:bg-gray-700 ">
                         <tr>
                             <th scope="col" class="px-1 py-3 border border-black">

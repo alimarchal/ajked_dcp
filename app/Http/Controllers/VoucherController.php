@@ -22,7 +22,12 @@ class VoucherController extends Controller
     public function index(Request $request)
     {
 
-
+        $per_page_print = 100;
+        if ($request->input('per_page_print')) {
+            $per_page_print = $request->per_page_print;
+        } else {
+            $per_page_print = 100;
+        }
 
 //        dd(Auth::user()->hasRole(['circle']));
         // Check if the user has the "Super-Admin" role
@@ -31,7 +36,7 @@ class VoucherController extends Controller
                 ->allowedFilters(['vouchers.date', 'branch.bank_div_name', 'branch.bank_sdiv_name', 'vouchers.branch_id', AllowedFilter::exact('branch_id'), AllowedFilter::scope('starts_before')])
                 ->allowedIncludes(['user', 'branch'])
                 ->orderBy('vouchers.date', 'desc')
-                ->get();
+                ->paginate($per_page_print)->withQueryString();
 
         } elseif (Auth::user()->hasRole(['circle'])) {
 
@@ -43,7 +48,7 @@ class VoucherController extends Controller
                 ->allowedIncludes(['user', 'branch'])
                 ->whereIn('branch_id', $branches)
                 ->orderBy('vouchers.date', 'desc')
-                ->get();
+                ->paginate($per_page_print)->withQueryString();
 
         } elseif (Auth::user()->hasRole(['division'])) {
 
@@ -55,7 +60,7 @@ class VoucherController extends Controller
                 ->allowedIncludes(['user', 'branch'])
                 ->whereIn('branch_id', $branches)
                 ->orderBy('vouchers.date', 'desc')
-                ->get();
+                ->paginate($per_page_print)->withQueryString();
 
         } elseif (Auth::user()->hasRole(['sub-division'])) {
 
@@ -67,14 +72,14 @@ class VoucherController extends Controller
                 ->allowedIncludes(['user', 'branch'])
                 ->whereIn('branch_id', $branches)
                 ->orderBy('vouchers.date', 'desc')
-                ->get();
+                ->paginate($per_page_print)->withQueryString();
 
         } else {
             $vouchers = QueryBuilder::for(Voucher::with(['user', 'branch']))
                 ->allowedFilters([AllowedFilter::exact('date')])
                 ->where('branch_id', Auth::user()->branch_id)
                 ->orderBy('created_at', 'desc')
-                ->paginate(100);
+                ->paginate($per_page_print)->withQueryString();
         }
         return view('vouchers.index', compact('vouchers'));
     }
