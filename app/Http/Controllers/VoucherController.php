@@ -76,7 +76,7 @@ class VoucherController extends Controller
 
         } else {
             $vouchers = QueryBuilder::for(Voucher::with(['user', 'branch']))
-                ->allowedFilters([AllowedFilter::exact('date')])
+                ->allowedFilters([AllowedFilter::exact('date'), AllowedFilter::scope('starts_before')])
                 ->where('branch_id', Auth::user()->branch_id)
                 ->orderBy('created_at', 'desc')
                 ->paginate($per_page_print)->withQueryString();

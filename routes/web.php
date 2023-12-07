@@ -87,6 +87,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified']
     Route::resource('bt',\App\Http\Controllers\BtController::class);
     Route::resource('branch',\App\Http\Controllers\BranchController::class);
 
+    Route::get('collections', [ReportController::class, 'collections'])->name('collections.index');
+
+
 
     //reports
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');

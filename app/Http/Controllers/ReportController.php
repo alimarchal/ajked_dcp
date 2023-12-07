@@ -59,4 +59,10 @@ class ReportController extends Controller
     }
 
 
+    public function collections()
+    {
+        return view('collections');
+    }
+
+
 }

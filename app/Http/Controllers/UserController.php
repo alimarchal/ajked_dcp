@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use Spatie\QueryBuilder\AllowedFilter;
+use Spatie\QueryBuilder\QueryBuilder;
 
 class UserController extends Controller
 {
@@ -16,10 +19,42 @@ class UserController extends Controller
         $this->middleware('role:Super-Admin')->only(['create', 'index', 'store', 'edit', 'update']);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        $users = User::with('roles', 'permissions')->paginate(100)->withQueryString();
-        return view('users.index', compact('users'));
+//        $users = User::with('roles', 'permissions','branch')->paginate(1000)->withQueryString();
+
+        // Set a default value for perPage, and ensure it's an integer
+        $perPage = (int)($request->input('perPage', 100));
+
+        // List of allowed 'perPage' values
+        $allowedPerPageValues = [5, 10, 50, 100, 200, 300, 400, 500, 1000, 2000, 5000]; // Add more values as needed
+
+        // Ensure the requested 'perPage' value is in the allowed list
+        if (!in_array($perPage, $allowedPerPageValues)) {
+            $perPage = 100; // Default value if requested 'perPage' is not allowed
+        }
+
+        $users = QueryBuilder::for(User::class)
+            ->allowedFilters([
+                AllowedFilter::exact('role_id'), // Assuming you have a role_id column
+                AllowedFilter::exact('permission_id'), // Assuming you have a permission_id column
+                'branch.circle', // Filter based on the circle property of the branch relation
+                // Add more filters as needed
+            ])
+            ->with('roles', 'permissions', 'branch')
+            ->join('branches', 'users.branch_id', '=', 'branches.id')
+            ->orderBy('branches.circle')
+            ->paginate($perPage)
+            ->withQueryString();
+
+        $circles = Branch::groupBy('circle')->get();
+
+//        $users = User::with('roles', 'permissions', 'branch')
+//            ->join('branches', 'users.branch_id', '=', 'branches.id')
+//            ->orderBy('branches.circle')
+//            ->paginate(1000)
+//            ->withQueryString();
+        return view('users.index', compact('users', 'circles'));
     }
 
     //

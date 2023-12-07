@@ -23,12 +23,17 @@
 
             @can('create')
                 <div class="flex justify-center items-center float-right">
-                    <a href="{{ route('voucher.create') }}"
-                       class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
-                       title="Create New Voucher">
-                        <img src="https://img.icons8.com/?size=512&id=f3o1AGoVZ2Un&format=png" class="h-5 w-5" alt="">
-                        <span class="hidden md:inline-block ml-2">Create New Voucher</span>
-                    </a>
+
+                    @if(Auth::user()->hasRole(['Super-Admin', 'admin']))
+
+                    @else
+                        <a href="{{ route('voucher.create') }}"
+                           class="flex items-center px-4 py-2 text-gray-600 bg-white border rounded-lg focus:outline-none hover:bg-gray-100 transition-colors duration-200 transform dark:text-gray-200 dark:border-gray-200  dark:hover:bg-gray-700 ml-2"
+                           title="Create New Voucher">
+                            <img src="https://img.icons8.com/?size=512&id=f3o1AGoVZ2Un&format=png" class="h-5 w-5" alt="">
+                            <span class="hidden md:inline-block ml-2">Create New Voucher</span>
+                        </a>
+                    @endif
 
                 </div>
             @endcan
